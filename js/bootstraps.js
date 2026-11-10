@@ -1723,7 +1723,7 @@ $(function () {
         });
     });
     //Loander
-    $(window).load(function () {
+    $(window).on("load", function () {
         $('.preloader p').fadeOut();
         $('.preloader').delay(500).fadeOut('slow');
         $('body').delay(600).css({ 'overflow': 'visible' });

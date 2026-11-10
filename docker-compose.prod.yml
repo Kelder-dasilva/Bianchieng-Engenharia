@@ -1,0 +1,35 @@
+# Bianchi Engenharia na VPS (Coolify + Traefik), em https://bianchi.kldstudio.com.br
+# Não rode à mão: use ./deploy.sh IP_DA_VPS
+x-logs: &logs
+  driver: journald
+  options:
+    tag: "{{.Name}}"
+
+services:
+  web:
+    build: .
+    container_name: bianchi-web
+    logging: *logs
+    restart: unless-stopped
+    mem_limit: 64m
+    networks:
+      - coolify
+    # Log de acesso em /opt/bianchi/logs, lido pelo fail2ban da VPS
+    volumes:
+      - ./logs:/var/log/nginx/site
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=coolify
+      - traefik.http.routers.be-http.rule=Host(`${DOMINIO:-bianchi.kldstudio.com.br}`)
+      - traefik.http.routers.be-http.entrypoints=http
+      - traefik.http.routers.be-http.middlewares=be-https
+      - traefik.http.middlewares.be-https.redirectscheme.scheme=https
+      - traefik.http.routers.be.rule=Host(`${DOMINIO:-bianchi.kldstudio.com.br}`)
+      - traefik.http.routers.be.entrypoints=https
+      - traefik.http.routers.be.tls=true
+      - traefik.http.routers.be.tls.certresolver=letsencrypt
+      - traefik.http.services.be.loadbalancer.server.port=80
+
+networks:
+  coolify:
+    external: true

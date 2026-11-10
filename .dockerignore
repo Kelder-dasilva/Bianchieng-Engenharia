@@ -1,0 +1,18 @@
+.git
+logs
+# Rascunhos sem link no site (páginas-modelo)
+projetos/projeto4.html
+projetos/projeto5.html
+projetos/projeto6.html
+projetos/projeto7.html
+projetos/projeto8.html
+projetos/projeto9.html
+# Versão antiga do site (bootstrap, jQuery, slick, imagens originais em JPEG).
+# O site novo usa só a pasta assets/.
+arquivos
+css
+css-carousel
+js
+js-carousel
+vendor
+fonts
